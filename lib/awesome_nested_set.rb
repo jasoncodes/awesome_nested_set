@@ -212,6 +212,14 @@ module CollectiveIdea #:nodoc:
             yield(o, path.length - 1)
           end
         end
+
+        def map_with_level(objects)
+          result = []
+          each_with_level objects do |object, level|
+            result << yield(object, level)
+          end
+          result
+        end
       end
       
       # Mixed into both classes and instances to provide easy access to the column names
