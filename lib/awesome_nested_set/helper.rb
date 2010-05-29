@@ -16,8 +16,8 @@ module CollectiveIdea #:nodoc:
         #
         # == Usage
         #
-        #   <%= f.select :parent_id, nested_set_options(Category, @category) {|i|
-        #       "#{'–' * i.level} #{i.name}"
+        #   <%= f.select :parent_id, nested_set_options(Category, @category) {|i, level|
+        #       "#{'–' * level} #{i.name}"
         #     }) %>
         #
         def nested_set_options(class_or_item, mover = nil, &block)
