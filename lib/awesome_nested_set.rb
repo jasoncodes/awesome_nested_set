@@ -551,7 +551,7 @@ module CollectiveIdea #:nodoc:
 
             # select the rows in the model between a and d, and apply a lock
             self.class.base_class.find(:all,
-              :select => "id",
+              :select => self.class.primary_key,
               :conditions => ["#{quoted_left_column_name} >= :a and #{quoted_right_column_name} <= :d", {:a => a, :d => d}],
               :lock => true
             )
