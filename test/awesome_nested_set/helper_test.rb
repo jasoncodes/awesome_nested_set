@@ -37,6 +37,17 @@ module CollectiveIdea
           assert_equal expected, actual
         end
         
+        def test_nested_set_options_for_branch
+          expected = [
+            ['- Child 2', 3],
+            ['-- Child 2.1', 4]
+          ]
+          actual = nested_set_options(categories(:child_2)) do |c, level|
+            "#{'-' * level} #{c.name}"
+          end
+          assert_equal expected, actual
+        end
+        
         def test_nested_set_options_with_mover
           expected = [
             [" Top Level", 1],
