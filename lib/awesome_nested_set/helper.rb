@@ -11,8 +11,12 @@ module CollectiveIdea #:nodoc:
         #
         # == Params
         #  * +class_or_item+ - Class name or top level times
-        #  * +mover+ - The item that is being move, used to exlude impossible moves
-        #  * +&block+ - a block that will be used to display: { |item| ... item.name }
+        #  * +mover+ - The item that is being move, used to exclude impossible moves
+        #  * +options+ - hash of additional options
+        #  * +&block+ - a block that will be used to display: { |item| ... item.name }
+        #
+        # == Options
+        #  * +include_root+ - Include root object(s) in output. Default: true
         #
         # == Usage
         #
@@ -20,12 +24,15 @@ module CollectiveIdea #:nodoc:
         #       "#{'–' * level} #{i.name}"
         #     }) %>
         #
-        def nested_set_options(class_or_item, mover = nil, &block)
+        def nested_set_options(class_or_item, mover = nil, options = {}, &block)
           class_or_item = class_or_item.roots if class_or_item.is_a?(Class)
+          options.assert_valid_keys :include_root
+          options.reverse_merge! :include_root => true
           items = Array(class_or_item)
           result = []
           items.each do |root|
-            result += root.class.map_with_level(root.self_and_descendants) do |i, level|
+            objects = options[:include_root] ? root.self_and_descendants : root.descendants
+            result += root.class.map_with_level(objects) do |i, level|
               if mover.nil? || mover.new_record? || mover.move_possible?(i)
                 [yield(*[i, level].first(block.arity)), i.id]
               end
