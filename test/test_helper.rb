@@ -3,6 +3,7 @@ plugin_test_dir = File.dirname(__FILE__)
 RAILS_ROOT = plugin_test_dir
 
 require 'rubygems'
+gem 'test-unit'
 require 'test/unit'
 require 'multi_rails_init'
 require 'test_help'
