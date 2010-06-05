@@ -74,6 +74,23 @@ module CollectiveIdea
           assert_equal expected, actual
         end
         
+        class Category_NoToArray < Category
+          def to_a
+            raise 'to_a called'
+          end
+        end
+        
+        def test_nested_set_options_does_not_call_to_a
+          expected = [
+            ['Child 2', 3],
+            ['Child 2.1', 4]
+          ]
+          actual = nested_set_options Category_NoToArray.find(3) do |c|
+            c.name
+          end
+          assert_equal expected, actual
+        end
+        
       end
     end
   end
