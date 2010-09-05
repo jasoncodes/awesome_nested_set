@@ -128,10 +128,13 @@ module CollectiveIdea #:nodoc:
           end.push(nil).join(", ")
           [quoted_left_column_name, quoted_right_column_name].all? do |column|
             # No duplicates
-            find(:first, 
-              :select => "#{scope_string}#{column}, COUNT(#{column})", 
-              :group => "#{scope_string}#{column} 
-                HAVING COUNT(#{column}) > 1").nil?
+            with_exclusive_scope do
+              first(
+                :select => "#{scope_string}#{column}, COUNT(#{column})",
+                :group => "#{scope_string}#{column}",
+                :having => "COUNT(#{column}) > 1"
+              ).nil?
+            end
           end
         end
         
