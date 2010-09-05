@@ -144,7 +144,7 @@ module CollectiveIdea #:nodoc:
             end.push(nil).join(", ")
             [quoted_left_column_name, quoted_right_column_name].all? do |column|
               # No duplicates
-              select("#{scope_string}#{column}, COUNT(#{column})").
+              reorder('').select("#{scope_string}#{column}, COUNT(#{column})").
                   group("#{scope_string}#{column}").
                   having("COUNT(#{column}) > 1").
                   first.nil?

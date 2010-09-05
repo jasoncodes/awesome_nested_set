@@ -775,6 +775,10 @@ describe "AwesomeNestedSet" do
     end
   end
 
+  it 'should be valid with a ordering default scope' do
+    Category_DefaultScope.should be_valid
+  end
+
   it "each_with_level" do
     levels = [
       [0, "Top Level"],

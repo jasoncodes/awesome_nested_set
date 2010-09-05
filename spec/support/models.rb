@@ -45,6 +45,10 @@ class Category < ActiveRecord::Base
   end
 end
 
+class Category_DefaultScope < Category
+  default_scope order('categories.lft ASC')
+end
+
 class Thing < ActiveRecord::Base
   acts_as_nested_set :counter_cache => 'children_count'
 end
