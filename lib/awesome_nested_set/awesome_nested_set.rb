@@ -459,7 +459,7 @@ module CollectiveIdea #:nodoc:
             in_tenacious_transaction do
               reload
 
-              nested_set_scope.where(:id => id).update_all(["#{quoted_depth_column_name} = ?", level])
+              nested_set_scope.where(self.class.base_class.primary_key => id).update_all(["#{quoted_depth_column_name} = ?", level])
             end
             self[depth_column_name.to_sym] = self.level
           end
@@ -498,7 +498,7 @@ module CollectiveIdea #:nodoc:
             reload_nested_set
             # select the rows in the model that extend past the deletion point and apply a lock
             self.class.base_class.find(:all,
-              :select => "id",
+              :select => self.class.base_class.primary_key,
               :conditions => ["#{quoted_left_column_name} >= ?", left],
               :lock => true
             )
