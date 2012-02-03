@@ -12,16 +12,22 @@ module CollectiveIdea #:nodoc:
         #
         # == Params
         #  * +class_or_item+ - Class name or top level times
-        #  * +mover+ - The item that is being move, used to exlude impossible moves
+        #  * +mover+ - The item that is being move, used to exclude impossible moves
+        #  * +options+ - hash of additional options
         #  * +&block+ - a block that will be used to display: { |item| ... item.name }
         #
+        # == Options
+        #  * +include_root+ - Include root object(s) in output. Default: true
         # == Usage
         #
         #   <%= f.select :parent_id, nested_set_options(Category, @category) {|i|
         #       "#{'–' * i.level} #{i.name}"
         #     }) %>
         #
-        def nested_set_options(class_or_item, mover = nil)
+        def nested_set_options(class_or_item, mover = nil, options = {})
+          options.assert_valid_keys :include_root
+          options.reverse_merge! :include_root => true
+
           if class_or_item.is_a? Array
             items = class_or_item.reject { |e| !e.root? }
           else
@@ -30,7 +36,8 @@ module CollectiveIdea #:nodoc:
           end
           result = []
           items.each do |root|
-            result += root.self_and_descendants.map do |i|
+            objects = options[:include_root] ? root.self_and_descendants : root.descendants
+            result += objects.map do |i|
               if mover.nil? || mover.new_record? || mover.move_possible?(i)
                 [yield(i), i.id]
               end

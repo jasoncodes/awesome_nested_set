@@ -23,6 +23,19 @@ describe "Helper" do
       actual.should == expected
     end
 
+    it "test_nested_set_options_without_root" do
+      expected = [
+        ["- Child 1", 2],
+        ['- Child 2', 3],
+        ['-- Child 2.1', 4],
+        ['- Child 3', 5]
+      ]
+      actual = nested_set_options(Category, nil, :include_root => false) do |c, level|
+        "#{'-' * c.level} #{c.name}"
+      end
+      actual.should == expected
+    end
+
     it "test_nested_set_options_with_mover" do
       expected = [
         [" Top Level", 1],
